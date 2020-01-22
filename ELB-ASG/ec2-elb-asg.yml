@@ -1,9 +1,9 @@
 ---
 Resources:
-  EC2ELBASGEC2SecurityGroup:
+  EC2ELBASGLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: EC2 Security Group
+      GroupDescription: Load Balancer Security Group
       SecurityGroupIngress:
       - IpProtocol: tcp
         FromPort: 80
@@ -13,6 +13,15 @@ Resources:
         FromPort: 22
         ToPort: 22
         CidrIp: 0.0.0.0/0
+
+  EC2ELBASGEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EC2 Security Group
+      SecurityGroupIngress:
+      - IpProtocol: -1
+        SourceSecurityGroupId: !GetAtt EC2ELBASGLoadBalancerSecurityGroup.GroupId
+
 
 
   #EC2

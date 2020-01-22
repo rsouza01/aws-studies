@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 
-#aws cloudformation describe-stack-events --profile aws-studies --region us-east-1 --stack-name EC2TUTORIAL
+#aws cloudformation describe-stack-events --profile aws-studies --region us-east-1 --stack-name EC2ELBASG
 
 #aws cloudformation delete-stack --profile aws-studies --region us-east-1 --stack-name EC2TUTORIAL
 
