@@ -1,0 +1,37 @@
+---
+Resources:
+  EC2ELBASGEC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: EC2 Security Group
+      SecurityGroupIngress:
+      - IpProtocol: tcp
+        FromPort: 80
+        ToPort: 80
+        CidrIp: 0.0.0.0/0
+      - IpProtocol: tcp
+        FromPort: 22
+        ToPort: 22
+        CidrIp: 0.0.0.0/0
+
+
+  #EC2
+
+  # #ELB
+  # EC2ELBASG_LoadBalancer:
+  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+  #   Properties:
+  #     IpAddressType: String
+  #     LoadBalancerAttributes:
+  #       - LoadBalancerAttribute
+  #     Name: EC2ELBASG_LOADBALANCER
+  #     Scheme: internet-facing
+  #     SecurityGroups:
+  #       - String
+  #     Subnets:
+  #       - String
+  #     Tags:
+  #       - Tag
+  #     Type: String
+
+#ASG
