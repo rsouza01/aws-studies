@@ -24,23 +24,40 @@ Resources:
 
 
 
-  #EC2
-
   # #ELB
-  # EC2ELBASG_LoadBalancer:
-  #   Type: AWS::ElasticLoadBalancingV2::LoadBalancer
-  #   Properties:
-  #     IpAddressType: String
-  #     LoadBalancerAttributes:
-  #       - LoadBalancerAttribute
-  #     Name: EC2ELBASG_LOADBALANCER
-  #     Scheme: internet-facing
-  #     SecurityGroups:
-  #       - String
-  #     Subnets:
-  #       - String
-  #     Tags:
-  #       - Tag
-  #     Type: String
 
-#ASG
+  #EC2 Config
+  EC2LaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: ami-062f7200baf2fa504
+      SecurityGroups:
+        - Ref: EC2ELBASGLoadBalancerSecurityGroup
+      #- Ref: EC2ELBASGEC2SecurityGroup
+      InstanceType: t2.micro
+      BlockDeviceMappings:
+      - DeviceName: "/dev/sdk"
+        Ebs:
+          VolumeSize: '50'
+      - DeviceName: "/dev/sdc"
+        VirtualName: ephemeral0
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo su
+          yum update -y
+          yum install -y httpd.x86_64
+          systemctl start httpd.service
+          systemctl enable httpd.service
+          echo "Hello World from $(hostname -f)" > /var/www/html/index.html
+
+  EC2ELBASGAutoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      AvailabilityZones:
+        Fn::GetAZs: ''
+      LaunchConfigurationName:
+        Ref: EC2LaunchConfig
+      MinSize: '1'
+      MaxSize: '3'
+      #LoadBalancerNames: Ref: LB
