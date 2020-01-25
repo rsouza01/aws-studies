@@ -1,3 +1,5 @@
+![Logo](logo.png)
+
 # AWS Certification - Study scripts
 
 Collection of study references and scripts for AWS Certification
