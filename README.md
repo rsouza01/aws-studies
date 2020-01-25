@@ -1,4 +1,4 @@
-![Logo](logo.png)
+![Logo](logo.jpg)
 
 # AWS Certification - Study scripts
 
