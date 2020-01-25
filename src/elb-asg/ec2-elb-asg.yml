@@ -1,4 +1,23 @@
 ---
+
+Parameters:
+  availabilityzone:
+    Description: 'Required. Availability zone'
+    Type: 'String'
+    Default: 'us-east-1a' 
+  desiredclustersize:
+    Description: 'Required. Desired number of instances'
+    Type: 'Number'
+    Default: '1' 
+  minclustersize:
+    Description: 'Required. Min number of instances'
+    Type: 'Number'
+    Default: '1' 
+  maxclustersize:
+    Description: 'Required. Max number of instances'
+    Type: 'Number'
+    Default: '3' 
+
 Resources:
   EC2ELBASGLoadBalancerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -22,19 +41,34 @@ Resources:
       - IpProtocol: -1
         SourceSecurityGroupId: !GetAtt EC2ELBASGLoadBalancerSecurityGroup.GroupId
 
+  VPC: 
+    Type: "AWS::EC2::VPC"
+    Properties: 
+      CidrBlock: "10.10.0.0/16"
 
+  PublicSubnet1: 
+    Type: "AWS::EC2::Subnet"
+    Properties: 
+      VpcId: !Ref VPC
+      CidrBlock: "10.10.10.0/24"
+      AvailabilityZone: !Ref availabilityzone
 
+  PublicSubnet2: 
+    Type: "AWS::EC2::Subnet"
+    Properties: 
+      VpcId: !Ref VPC
+      CidrBlock: "10.10.10.0/24"
+      AvailabilityZone: !Ref availabilityzone
+    
+        
   EC2ELBASGEC2LoadBalancer:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
-      SecurityGroups:
+        Subnets: 
+        - !Ref PublicSubnet1
+        - !Ref PublicSubnet2
+        SecurityGroups:
         - !Ref EC2ELBASGLoadBalancerSecurityGroup
-      HealthCheck:
-        Target: HTTP:80/
-        HealthyThreshold: '3'
-        UnhealthyThreshold: '5'
-        Interval: '30'
-        Timeout: '5'
 
   #EC2 Config
   EC2LaunchConfig:
@@ -68,8 +102,8 @@ Resources:
         Fn::GetAZs: ''
       LaunchConfigurationName:
         Ref: EC2LaunchConfig
-      MinSize: '3'
-      MaxSize: '5'
+      MinSize: !Ref minclustersize
+      MaxSize: !Ref maxclustersize
       LoadBalancerNames:
       - Ref: EC2ELBASGEC2LoadBalancer
 

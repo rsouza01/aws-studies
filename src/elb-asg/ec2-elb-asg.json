@@ -1,0 +1,18 @@
+[
+    {
+        "ParameterKey": "availabilityzone",
+        "ParameterValue": "us-east-1a"
+    }, 
+    {
+        "ParameterKey": "desiredclustersize",
+        "ParameterValue": 2
+    }, 
+    {
+        "ParameterKey": "minclustersize",
+        "ParameterValue": 2
+    }, 
+    {
+        "ParameterKey": "maxclustersize",
+        "ParameterValue": 3
+    }
+  ]
